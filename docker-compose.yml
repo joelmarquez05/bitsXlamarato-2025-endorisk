@@ -1,0 +1,16 @@
+version: '3.8'
+
+services:
+  nest-app:
+    build: .
+    container_name: nest-streamlit
+    ports:
+      - "8501:8501"
+    volumes:
+      - ./app:/app/app
+      - ./src:/app/src
+      - ./models:/app/models
+      - ./data:/app/data
+    environment:
+      - GEMINI_API_KEY=${GEMINI_API_KEY}
+    restart: unless-stopped

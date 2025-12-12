@@ -1,0 +1,9 @@
+# This folder contains Jupyter notebooks organized by phase.
+# 
+# WORKFLOW:
+# 01 → 02 → 03 → 04 (each notebook saves its output for the next one)
+#
+# 01_exploratory_analysis.ipynb - EDA, understand the data
+# 02_data_preprocessing.ipynb   - Clean data, feature engineering
+# 03_model_training.ipynb       - Train and tune models
+# 04_model_evaluation.ipynb     - Evaluate, compare, select best model

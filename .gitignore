@@ -134,16 +134,6 @@ celerybeat.pid
 # SageMath parsed files
 *.sage.py
 
-# Environments
-.env
-.envrc
-.venv
-env/
-venv/
-ENV/
-env.bak/
-venv.bak/
-
 # Spyder project settings
 .spyderproject
 .spyproject
@@ -205,3 +195,22 @@ cython_debug/
 marimo/_static/
 marimo/_lsp/
 __marimo__/
+
+# ============================================================================
+# NEST Project Specific
+# ============================================================================
+
+# Environment variables with secrets (NEVER commit)
+.env
+
+# Raw data (may contain sensitive patient info - DO NOT COMMIT)
+data/raw/*
+!data/raw/.gitkeep
+
+# Large model files (optional - uncomment if models are too large)
+# models/*.joblib
+
+# Processed data (can be regenerated from notebooks)
+# Uncomment if you want to exclude processed data:
+# data/processed/*
+# !data/processed/.gitkeep

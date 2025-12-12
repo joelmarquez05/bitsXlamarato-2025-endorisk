@@ -1,0 +1,3 @@
+# This folder contains cleaned and preprocessed data ready for modeling.
+# Files here are OUTPUT from notebooks/02_data_preprocessing.ipynb
+# Example: features_v1.csv, train_test_split.pkl

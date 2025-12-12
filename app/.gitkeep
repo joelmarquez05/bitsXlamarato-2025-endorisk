@@ -1,0 +1,9 @@
+# This folder contains the Streamlit web application.
+# 
+# Files:
+# - streamlit_app.py : Main application entry point
+# - components/      : Reusable UI components
+#
+# Run with:
+#   cd app
+#   streamlit run streamlit_app.py

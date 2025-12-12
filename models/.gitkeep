@@ -1,0 +1,6 @@
+# This folder contains trained models and their metadata.
+# Naming convention: {model_type}_{version}.joblib
+# Example: xgboost_v1.joblib, xgboost_v1_metadata.joblib
+#
+# IMPORTANT: Also save preprocessing artifacts here (scalers, encoders)
+# so the Streamlit app can load everything needed for inference.
