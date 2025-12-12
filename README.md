@@ -54,10 +54,8 @@ EndoCore/
 ├── data/                   # Data storage (gitignored)
 ├── models/                 # Serialized ML models
 ├── notebooks/              # Data Science experiments (EDA, Training)
-├── src/
-│   ├── backend/            # Logic & Database connection
-│   ├── frontend/           # Streamlit UI
-│   └── utils/              # Helper functions
+├── app/                    # Streamlit UI
 ├── docker-compose.yml      # Service orchestration
 ├── Dockerfile              # Container definition
-└── generate_mock_data.py   # Synthetic data generator for testing
+└── requirements.txt        # Dependencies
+```

@@ -170,8 +170,6 @@ bitsXlamarato-2025-pau_overfitting/
 ├── 📁 app/                     # App Streamlit
 │   └── main.py
 │
-├── 📁 src/                     # Código reutilizable (opcional)
-│
 ├── requirements.txt
 ├── Dockerfile
 ├── docker-compose.yml
