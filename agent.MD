@@ -13,6 +13,7 @@ Aplicació Streamlit amb:
    - Predicció (probabilitat + semàfor 🟢🟡🔴)
    - Interpretabilitat (gràfic d'importància de features, tècniques com SHAP)
    - Explicació IA (Gemini API)
+4. **Disseny Responsive** - L'app ha de visualitzar-se correctament en dispositius mòbils (telèfons)
 
 ## Coneixement Mèdic Crític
 - **NSMP** = 50% dels casos, grup "calaix de sastre"
@@ -30,8 +31,7 @@ Aplicació Streamlit amb:
 ├── data/processed/     # Dades netes
 ├── notebooks/          # 01→02→03→04 en ordre
 ├── models/             # Models entrenats (.joblib)
-├── app/                # Streamlit app
-└── src/                # Mòduls reutilitzables
+└── app/                # Streamlit app
 ```
 
 ---
@@ -195,9 +195,6 @@ from pathlib import Path
 import pandas as pd
 import numpy as np
 from sklearn.ensemble import RandomForestClassifier
-
-# 3. Local
-from src.preprocessing import clean_data
 ```
 
 #### Estructura d'un mòdul
