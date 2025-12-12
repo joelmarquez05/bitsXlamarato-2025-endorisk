@@ -1,5 +1,34 @@
 # Guía del Proyecto NEST - Para el Equipo
 
+---
+
+## 🚀 Quick Start (Lo Primero)
+
+### App Streamlit (Docker)
+```bash
+docker compose up --build -d
+```
+→ Abre **http://localhost:8501**
+
+### Notebooks (venv local)
+```bash
+# Primera vez:
+python -m venv .venv
+.venv\Scripts\activate
+pip install -r requirements.txt
+
+# Cada vez que abras el proyecto:
+.venv\Scripts\activate
+```
+
+### API Key (.env)
+Crea archivo `.env` en la raíz:
+```
+GEMINI_API_KEY=tu_api_key_aqui
+```
+
+---
+
 ## 1. ¿Qué estamos construyendo?
 
 **NEST** = Herramienta para predecir la probabilidad de recaída en pacientes con cáncer de endometrio NSMP.
@@ -205,10 +234,76 @@ bitsXlamarato-2025-pau_overfitting/
 
 ---
 
-## 8. Setup del Entorno (Docker)
+## 8. Setup del Entorno
 
-### Paso 1: Crear archivo `.env`
-Crea un archivo llamado `.env` en la raíz del proyecto con tu API key de Gemini:
+Tenemos **DOS entornos** separados:
+
+| Entorno | Uso | ¿Cuándo? |
+|---------|-----|----------|
+| **Docker** | App Streamlit | Siempre para ver/probar la app |
+| **venv local** | Notebooks Jupyter | Para desarrollo de ML |
+
+---
+
+### 8.1 Docker (App Streamlit)
+
+**Único comando que necesitas:** 
+```bash
+docker compose up --build -d
+```
+
+> 💡 El flag `-d` hace que corra en segundo plano (no bloquea tu terminal)
+
+La app estará disponible en: **http://localhost:8501**
+
+#### Otros comandos útiles:
+```bash
+# Ver logs del contenedor
+docker compose logs -f
+
+# Parar el contenedor
+docker compose down
+
+# Reconstruir si cambiaste algo
+docker compose up --build -d
+```
+
+---
+
+### 8.2 Entorno Virtual Local (Notebooks)
+
+Para trabajar con las notebooks necesitas un entorno Python local.
+
+#### Primera vez (crear el venv):
+```bash
+# Crear el entorno virtual
+python -m venv .venv
+
+# Activar el entorno (Windows PowerShell)
+.venv\Scripts\activate
+
+# Instalar dependencias
+pip install -r requirements.txt
+```
+
+#### Cada vez que abras el proyecto:
+```bash
+# Solo necesitas activar el venv
+.venv\Scripts\activate
+```
+
+> 📍 Sabrás que está activo cuando veas `(.venv)` al inicio de tu terminal
+
+#### En VS Code:
+1. Abre una notebook
+2. Click en "Select Kernel" (arriba a la derecha)
+3. Selecciona `.venv` o "Python 3.x (.venv)"
+
+---
+
+### 8.3 Archivo `.env` (API Keys)
+
+Crea un archivo llamado `.env` en la raíz del proyecto:
 
 ```
 GEMINI_API_KEY=tu_api_key_real_aqui
@@ -216,13 +311,7 @@ GEMINI_API_KEY=tu_api_key_real_aqui
 
 > 📍 Obtener API key: https://makersuite.google.com/app/apikey
 
-### Paso 2: Levantar Docker
-```bash
-docker-compose up --build
-```
-
-### Paso 3: Abrir la app
-La app estará disponible en: **http://localhost:8501**
+⚠️ **IMPORTANTE:** Este archivo está en `.gitignore` y NO se sube a GitHub.
 
 ---
 
