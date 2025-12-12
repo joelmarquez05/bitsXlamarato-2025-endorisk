@@ -11,7 +11,7 @@ Aplicació Streamlit amb:
 2. **Formulari** - Entrada de dades del pacient
 3. **Resultat** amb 3 panells:
    - Predicció (probabilitat + semàfor 🟢🟡🔴)
-   - Interpretabilitat (gràfic d'importància de features)
+   - Interpretabilitat (gràfic d'importància de features, tècniques com SHAP)
    - Explicació IA (Gemini API)
 
 ## Coneixement Mèdic Crític
@@ -138,6 +138,45 @@ GEMINI_MODEL = 'gemini-pro'
 | `_scaled` | Dades normalitzades | `X_scaled` |
 | `_encoded` | Dades codificades | `stage_encoded` |
 
+#### Convencions de Versionat
+
+Quan es fan múltiples experiments (preprocessats, models, etc.), segueix aquest format:
+
+**Format:** `nom_descriptiu_vX.extensió`
+
+| Tipus | Exemple | Descripció |
+|-------|---------|------------|
+| **Models** | `random_forest_v1.joblib` | Versió 1 del RF |
+|  | `xgboost_smote_v2.joblib` | XGBoost amb SMOTE, versió 2 |
+| **Scalers** | `scaler_v1.joblib` | Scaler per a v1 del model |
+|  | `scaler_minmax_v2.joblib` | MinMaxScaler per a v2 |
+| **Dades processades** | `features_train_v1.csv` | Train set versió 1 |
+|  | `features_train_smote_v2.csv` | Amb SMOTE aplicat |
+| **Encoders** | `label_encoder_v1.joblib` | Encoder per a categoricals |
+
+**Regles:**
+- Sempre incrementa la versió quan canviïs el preprocessat o els hiperparàmetres
+- Inclou tècnica en el nom si és rellevant (`_smote`, `_minmax`, `_pca`)
+- El model i el scaler han de coincidir en versió (`model_v2` + `scaler_v2`)
+- MAI sobreescriguis versions anteriors, crea una nova
+
+**Estructura de directoris recomanada:**
+```
+models/
+├── model_v1.joblib           # Baseline
+├── model_v2.joblib           # Amb tuning
+├── model_smote_v3.joblib     # Amb SMOTE
+├── scaler_v1.joblib
+├── scaler_v2.joblib
+└── scaler_v3.joblib
+
+data/processed/
+├── features_train_v1.csv
+├── features_test_v1.csv
+├── features_train_v2.csv     # Nou preprocessat
+└── features_test_v2.csv
+```
+
 ### 5. Estil de Codi
 - Segueix PEP 8
 - Codi net i llegible
@@ -201,3 +240,47 @@ Utilitza sempre aquests termes en anglès per consistència:
 | Probabilitat | `probability` |
 | Risc | `risk` |
 | Alt/Mitjà/Baix | `high`, `medium`, `low` |
+
+---
+
+## Informació Tècnica del Projecte
+
+### Workflow de Notebooks (Executar en ORDRE)
+
+```
+01_exploratory_analysis.ipynb  → No guarda res
+02_data_preprocessing.ipynb    → GUARDA: data/processed/*.csv, models/scaler.joblib
+03_model_training.ipynb        → CARGA des de data/processed/, GUARDA: models/model.joblib
+04_model_evaluation.ipynb      → CARGA: models/model.joblib, features_test.csv
+app/main.py (Streamlit)        → CARGA: models/model.joblib, models/scaler.joblib
+```
+
+### Joblib (Persistència de Models)
+
+Guardar model/scaler:
+```python
+import joblib
+joblib.dump(model, '../models/model.joblib')
+joblib.dump(scaler, '../models/scaler.joblib')
+```
+
+Carregar en app o notebook posterior:
+```python
+model = joblib.load('models/model.joblib')
+scaler = joblib.load('models/scaler.joblib')
+```
+
+### Entorns d'Execució
+
+| Entorn | Ús | Comanda |
+|--------|-----|---------|
+| **Docker** | App Streamlit | `docker compose up --build -d` |
+| **venv local** | Notebooks | `.venv\Scripts\activate` |
+
+### Paths Importants (des de notebooks/)
+- Dades: `../data/processed/`
+- Models: `../models/`
+- Scaler: `../models/scaler.joblib`
+
+### Paths Importants (des de app/)
+- Models: `models/` (sense `../` perquè Docker munta a /app)
