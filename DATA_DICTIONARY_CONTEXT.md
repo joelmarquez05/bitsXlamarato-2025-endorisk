@@ -4,8 +4,7 @@
 Este dataset contiene datos clínicos, patológicos, moleculares y de seguimiento de pacientes con cáncer de endometrio.
 **Objetivo del Agente:** Predecir el riesgo de recidiva en pacientes pertenecientes exclusivamente al grupo molecular **NSMP** (No Specific Molecular Profile / p53 wild-type).
 
-**IMPORTANTE:** El archivo original (`raw`) contiene pacientes de TODOS los grupos moleculares. El agente debe filtrar primero para obtener la cohorte NSMP limpia.
-
+**IMPORTANTE:** El archivo original (`raw`) contiene pacientes de solo el grupo molecular **NSMP**.
 ---
 
 ## 2. DICCIONARIO DE VARIABLES Y CODIFICACIÓN
@@ -25,23 +24,7 @@ Este dataset contiene datos clínicos, patológicos, moleculares y de seguimient
 *   `recidiva_exitus`: Estado vital post-recidiva.
 *   `libre_enferm`: Tiempo libre de enfermedad (en meses o días, verificar escala).
 
-### C. Clasificación Molecular (CRÍTICO PARA FILTRADO)
-Las siguientes variables definen el grupo molecular. Para ser **NSMP**, la paciente debe cumplir **todas** las siguientes condiciones:
-1.  **`mut_pole`**: Estado del gen POLE.
-    *   `0`: No mutado (Wild Type).
-    *   `1`: Mutado (Pathogenic).
-    *   **Regla NSMP:** Debe ser `0`.
-2.  **`p53_ihq`**: Inmunohistoquímica de p53.
-    *   `0`: Wild Type (Normal).
-    *   `1`: Overexpression (Anormal).
-    *   `2`: Null / Mutated (Anormal).
-    *   **Regla NSMP:** Debe ser `0` (Wild Type).
-3.  **`mlh1`, `msh2`, `msh6`, `pms2`**: Proteínas de reparación (Mismatch Repair).
-    *   `0` / `Intacto`: Presencia de expresión.
-    *   `1` / `Perdida`: Pérdida de expresión (MSI).
-    *   **Regla NSMP:** Todas deben estar intactas (No MSI-High).
-
-### D. Variables Clínico-Patológicas (Features Predictivas)
+### C. Variables Clínico-Patológicas (Features Predictivas)
 *   **`edad`**: Edad al diagnóstico (Numérica).
 *   **`imc`**: Índice de Masa Corporal. (Numérica).
 *   **`tipo_histologico`**: Tipo de tumor.
@@ -78,28 +61,10 @@ Las siguientes variables definen el grupo molecular. Para ser **NSMP**, la pacie
 
 ## 3. REGLAS DE LIMPIEZA Y PREPROCESAMIENTO PARA EL AGENTE
 
-### 1. Filtro de Cohorte (NSMP)
-El agente **DEBE** ejecutar este filtro antes de cualquier entrenamiento:
-```python
-df_nsmp = df[
-    (df['mut_pole'] == 0) & 
-    (df['p53_ihq'] == 0) & 
-    (df['tipo_histologico'] != 8) & # Excluir Carcinosarcomas
-    (df['tipo_histologico'] != 9)   # Excluir Sarcomas/Otros no epiteliales
-]
-```
-
-### 2. Manejo de Valores Nulos (NA)
+### 1. Manejo de Valores Nulos (NA)
 *   **`valor_de_ca125`**: Si es `NA`, imputar con mediana (o marcar como desconocido si el % es alto).
 *   **`grado`**: Si es `NA` y el tipo es "Endometrioide", verificar columna `comentarios`.
 *   **`imc`**: Valores faltantes pueden imputarse con la media de la cohorte.
-
-### 3. Exclusiones por Texto Libre
-El agente debe escanear la columna **`comentarios`** o **`otra_histo`** buscando las siguientes palabras clave para **EXCLUIR** pacientes mal clasificadas:
-*   "Sarcoma"
-*   "Leiomiosarcoma"
-*   "POLE mut" (si la columna numérica estaba vacía pero el texto lo confirma)
-*   "p53 mutado" / "p53 abn"
 
 ---
 
