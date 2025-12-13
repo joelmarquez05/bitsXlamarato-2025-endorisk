@@ -1,33 +1,18 @@
 version: '3.8'
 
 services:
-  # Versió Vertical (Single Page)
-  nest-app-vertical:
+  nest-app:
     build: .
-    container_name: nest-streamlit-vertical
+    container_name: nest-streamlit
     ports:
       - "8501:8501"
-    volumes:
-      - ./app:/app/app
-      - ./models:/app/models
-      - ./data:/app/data
-    environment:
-      - GEMINI_API_KEY=${GEMINI_API_KEY}
-    command: [ "streamlit", "run", "app/main.py", "--server.port=8501", "--server.address=0.0.0.0" ]
-    restart: unless-stopped
-
-  # Versió Pestanyes (Tabs)
-  nest-app-tabs:
-    build: .
-    container_name: nest-streamlit-tabs
-    ports:
-      - "8502:8502"
     volumes:
       - ./app:/app/app
       - ./src:/app/src
       - ./models:/app/models
       - ./data:/app/data
+      - ./.streamlit:/app/.streamlit
     environment:
       - GEMINI_API_KEY=${GEMINI_API_KEY}
-    command: [ "streamlit", "run", "app/main_tabs.py", "--server.port=8502", "--server.address=0.0.0.0" ]
+    command: [ "streamlit", "run", "app/main.py", "--server.port=8501", "--server.address=0.0.0.0" ]
     restart: unless-stopped
