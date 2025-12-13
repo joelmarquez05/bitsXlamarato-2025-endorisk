@@ -203,6 +203,9 @@ __marimo__/
 # Environment variables with secrets (NEVER commit)
 .env
 
+# Virtual environment
+.venv/
+
 # Raw data (may contain sensitive patient info - DO NOT COMMIT)
 !data/raw/.gitkeep
 
@@ -213,3 +216,17 @@ __marimo__/
 # Uncomment if you want to exclude processed data:
 # data/processed/*
 # !data/processed/.gitkeep
+
+
+# ============================================================================
+# NEST Project Specific - Data & Documentation
+# ============================================================================
+
+# Articles and research papers (large PDFs)
+Articles i guidelines/
+
+# Excel files (use CSV instead)
+*.xlsx
+
+# CSV files in root (should be in data/raw or data/processed)
+/*.csv
