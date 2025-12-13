@@ -281,3 +281,100 @@ scaler = joblib.load('models/scaler.joblib')
 
 ### Paths Importants (des de app/)
 - Models: `models/` (sense `../` perquè Docker munta a /app)
+
+---
+
+# Context del Projecte: Predicció de Recaiguda en Càncer d'Endometri (Perfil NSMP)
+
+**Objectiu:** Entrenar un model de Machine Learning (Classificació Binària) per predir la variable `recidiva`.
+**Dataset:** `data/raw/cancer_endometri.csv` - Dades clíniques, patològiques i moleculars de pacients amb càncer d'endometri.
+**Focus:** Especial interès en el perfil molecular **NSMP** (Non-Specific Molecular Profile), on els receptors hormonals són clau.
+
+---
+
+## 1. Variable Objectiu (Target) 🎯
+
+*   **`recidiva`**:
+    *   **0**: No (Pacient lliure de malaltia).
+    *   **1**: Sí (La malaltia va reaparèixer).
+    *   **Acció:** Aquesta és l'etiqueta a predir (`y`).
+    *   *Nota:* Eliminar files on el valor sigui `2` (Desconegut) o `NA`.
+
+---
+
+## 2. Variables Predictores (Features) ✅
+
+Aquestes són les columnes que contenen informació vàlida (clínica, patològica o molecular) disponible després de la cirurgia inicial i que has d'usar per entrenar el model (`X`).
+
+### A. Perfil Pacient
+*   **`edad`**: Numèrica. Edat al diagnòstic.
+*   **`imc`**: Numèrica. Índex de Massa Corporal (Obesitat és factor de risc).
+*   **`asa`**: Categòrica/Ordinal (1-4). Estat físic de la pacient (comorbiditats).
+
+### B. Característiques del Tumor (Patologia)
+*   **`histo_defin`** (o `tipo_histologico`): Categòrica. Tipus de càncer (Endometrioide, Serós, etc.). *Crucial*.
+*   **`grado_histologi`** (o `Grado`): Categòrica/Ordinal.
+    *   `1`: Baix grau (G1-G2).
+    *   `2`: Alt grau (G3). *Factor de risc alt*.
+*   **`tamano_tumoral`**: Numèrica. Mida en cm.
+*   **`infiltracion_mi`**: Categòrica/Ordinal. Profunditat d'invasió en l'úter.
+    *   `0`: No, `1`: <50%, `2`: >50%, `3`: Serosa. *A major valor, major risc*.
+*   **`afectacion_linf`** (LVSI): Binària (0/1). Invasió Limfovascular. *Factor pronòstic crític*.
+*   **`infilt_estr_cervix`**: Binària (0/1). Si el tumor ha baixat al coll uterí.
+*   **`FIGO2023`**: Categòrica (Estadiatge). Resumeix la gravetat.
+    *   **Transformació:** Convertir a escala ordinal (IA1=1, IA2=2 ... IVC=14).
+
+### C. Perfil Molecular (Clau per a NSMP) 🧬
+*   **`recep_est_porcent`**: Numèrica (0-100). **Variable Estrella**. Percentatge de Receptors d'Estrogen.
+    *   *Hipòtesi:* En NSMP, alt percentatge = millor pronòstic.
+*   **`rece_de_Ppor`**: Numèrica (0-100). Receptors de Progesterona.
+*   **`p53_ihq`**: Categòrica. (1=Normal, 2=Anormal/Mutat). *Defineix subtipus*.
+*   **`mut_pole`**: Categòrica. (1=Mutat, 2=No mutat). *Defineix subtipus*.
+*   **`msh2`, `msh6`, `pms2`, `mlh1`**: Categòriques. Proteïnes de reparació (Mismatch Repair). Si alguna és anormal (1), és perfil MMRd.
+
+### D. Dades Quirúrgiques i Tractament Inicial
+*   **`n_GC_Afect`**: Numèrica. Nombre de ganglis sentinella afectats.
+*   **`Reseccion_macroscopica_complet`**: Binària (0/1). Si s'ha extret tot el tumor visible (`1` és l'ideal).
+*   **`Tratamiento_RT`** / **`Tratamiento_sistemico`**: Binàries. Si va rebre Radioteràpia o Quimio adjuvant.
+
+---
+
+## 3. Variables a ELIMINAR (Data Leakage / Soroll) 🛑
+
+Aquestes variables contenen informació del "futur" (ocorren quan ja sabem que ha recaigut) o són identificadors irrellevants. **No les usis en l'entrenament.**
+
+### Data Leakage (Spoilers del futur)
+*   `recidiva_exitus`: És un proxy del target.
+*   `diferencia_dias_reci_exit`: Revela quant temps va viure/va estar sana.
+*   `fecha_de_recidi`: Si té data, és que va recaure.
+*   `f_muerte`: Revela si va morir.
+*   `causa_muerte`: Revela el resultat.
+*   `tto_recidiva`: Tractament rebut *per* la recaiguda.
+*   `Tt_recidiva_qx`: Cirurgia *per* la recaiguda.
+*   `loc_recidiva_r01` a `r06`: Lloc de la recaiguda.
+*   `numero_de_recid`, `num_recidiva`: Quantitat de recaigudes.
+*   `libre_enferm`: Estat actual (similar al target).
+*   `est_pcte`: Estat actual (viva/morta).
+*   `visita_control`, `Ultima_fecha`: Dates de seguiment.
+
+### Soroll / Identificadors
+*   `codigo_participante`: ID aleatori.
+*   `usuario_reg1`: ID administratiu.
+*   Dates crues (`f_diag`, `FN`, `fecha_qx`): Usar `edad` en el seu lloc.
+*   `comentarios`, `otras_especifi`: Text lliure no estructurat (difícil de processar amb poques dades).
+*   `compl_precoc_rXX` (Complicacions): Generalment no prediuen la biologia del càncer, només el postoperatori immediat.
+
+---
+
+## 4. Instruccions de Preprocessat ⚙️
+
+1.  **Filtratge de files:** Elimina files on `recidiva` sigui `NA` o `2` (Desconegut).
+2.  **Imputació de Nuls (`NA`):**
+    *   Per `recep_est_porcent`: Si falta, és crític. Intentar imputar amb la mitjana o marcar com a "Desconegut".
+    *   Per `Grado` o `FIGO`: Imputar amb la moda (valor més freqüent).
+3.  **Codificació:**
+    *   Variables binàries (Sí/No) -> 1/0.
+    *   `FIGO2023`: Mapejar manualment a ordre numèric (IA1 < IA2 < IB ...).
+4.  **Estratègia NSMP:**
+    *   Idealment, el model hauria d'aprendre que si `p53_ihq` és Normal i `mut_pole` és No Mutat, la variable `recep_est_porcent` guanya molt de pes predictiu.
+
