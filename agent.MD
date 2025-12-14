@@ -13,7 +13,7 @@ Aplicació Streamlit amb:
    - Predicció (probabilitat + semàfor 🟢🟡🔴)
    - Interpretabilitat (gràfic d'importància de features, tècniques com SHAP)
    - Explicació IA (Gemini API)
-4. **Disseny Responsive** - L'app ha de visualitzar-se correctament en dispositius mòbils (telèfons)
+4. **Disseny Responsive** - L'app ha de visualitzar-se correctament en dispositius mòbils (ytelèfons)
 
 ## Coneixement Mèdic Crític
 - **NSMP** = 50% dels casos, grup "calaix de sastre"
