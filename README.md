@@ -10,8 +10,8 @@
 ## Inspiració
 La nostra inspiració neix de la combinació de medicina i la ciència de dades. Com a equip, ja teníem experiència prèvia a l'haver participat en un projecte relacionat amb la ginecologia, fet que va despertar immediatament el nostre interès per aquest repte en particular. Crèiem que la creació d'un model de predicció sumada a una anàlisi profunda i rigorosa de la base de dades clínica, s'adequava perfectament a les nostres habilitats i interessos com a científics de dades. Aportar una solució tangible que pogués ajudar els oncòlegs en la presa de decisions difícils en un grup de pacients amb una gran complexitat de classificació era el nostre objectiu principal.
 
-## Què Fa Endorisk
-**Endorisk** és un Sistema de Suport a la Decisió Clínica (CDSS) impulsat per *Machine Learning*, dissenyat específicament per al subgrup molecular NSMP (Non-Specific Molecular Profile) del càncer d'endometri. La seva funció principal és classificar els pacients segons el seu risc (Baix o Alt) utilitzant variables clíniques i biomarcadors.
+## Què Fa EndoRisk
+**EndoRisk** és un Sistema de Suport a la Decisió Clínica (CDSS) impulsat per *Machine Learning*, dissenyat específicament per al subgrup molecular NSMP (Non-Specific Molecular Profile) del càncer d'endometri. La seva funció principal és classificar els pacients segons el seu risc (Baix o Alt) utilitzant variables clíniques i biomarcadors.
 
 Prioritzem un enfocament de "**Safety-First AI**":
 1.  **Estratificació de Risc**: Classifica els pacients en Alt o Baix Risc utilitzant variables clíniques clau (com invasió miometrial o grau histològic) i biomarcadors.
@@ -19,7 +19,7 @@ Prioritzem un enfocament de "**Safety-First AI**":
 3.  **Explicabilitat**: Utilitza **SHAP** per mostrar *per què* s'ha assignat una puntuació de risc específica, generant confiança amb els professionals mèdics i evitant l'efecte "caixa negra".
 
 ## Com ho hem creat
-Hem construït Endorisk seguint una arquitectura modular i robusta, reflectida en l'estructura del nostre repositori:
+Hem construït EndoRisk seguint una arquitectura modular i robusta, reflectida en l'estructura del nostre repositori:
 
 1.  **Flux de Data Science (Notebooks & Models)**:
     *   El nucli del projecte es basa en un pipeline seqüencial de 4 notebooks (Exploració, Preprocessament, Entrenament i Avaluació).
@@ -56,7 +56,7 @@ Principalment, hem adquirit un coneixement profund sobre la naturalesa clínica 
 
 A nivell tècnic, hem aprofundit en l'ús de tècniques d'**Explicabilitat (XAI)** com **SHAP**. També hem perfeccionat les nostres habilitats amb **Streamlit**, aprenent a gestionar estats complexos (`session_state`) i a dissenyar interfícies modulars pensades per a l'ús en consultes mèdiques.
 
-## El futur d'Endorisk
+## El futur d'EndoRisk
 El següent pas crític per a la maduresa del projecte és **augmentar el volum de pacients estudiats**. Una base de dades més gran ens permetria:
 *   Millorar la robustesa de les prediccions, reduint encara més el risc d'overfitting causat per l'alta dimensionalitat.
 *   Extreure conclusions clíniques més sòlides sobre subgrups minoritaris de pacients, donant més fiabilitat estadística als resultats.
