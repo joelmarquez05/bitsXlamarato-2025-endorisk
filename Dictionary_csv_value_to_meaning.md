@@ -1,8 +1,8 @@
-Aquí tienes la transcripción completa de las variables y sus diccionarios de valores, basada estrictamente en los documentos PDF que has proporcionado.
+# Diccionari de Dades i Valors Originals
 
-He agrupado las variables por las secciones del documento original para facilitar su lectura.
+A continuació presentem el diccionari de dades complet utilitzat en el projecte. Aquest document serveix de referència per interpretar els valors numèrics presents en el dataset original i mapejar-los al seu significat clínic real.
 
-# Diccionario de Datos: Cáncer de Endometrio
+> **Nota Important:** Les descripcions de les variables i els seus valors es mantenen en el seu idioma original (castellà) tal com apareixen a la documentació font de l'hospital i a la base de dades crua, per garantir la traçabilitat i fidelitat amb les dades d'origen.
 
 ## 1. Diagnóstico e Histología Inicial
 
